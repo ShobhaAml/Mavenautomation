@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Testadmin superevento shot" verbose="1">
+  <test name="Login testadmin">
+    <classes>
+      <class name="com.mavenautomation.tests.LoginTest"/>
+    </classes>
+  </test>
+  <test name="Create new shot">
+    <classes>
+      <class name="com.mavenautomation.tests.CreateShotTest"/>
+    </classes>
+  </test>
+</suite>
