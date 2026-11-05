@@ -63,7 +63,15 @@ public class SupereventoPage {
     }
 
     public void openEmisionTab() {
-        ui.click("tab.emision.xpath");
+        try {
+            ui.click("tab.emision.xpath");
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.urlContains("/emision/"));
+        } catch (TimeoutException tabStayedOnDatos) {
+            // The Datos tab ignores the Emisión click while publish checks are still failing
+            // (missing image, date, or title). Publishing the superevento is not required.
+            openEmisionFromPostUrl();
+        }
         ui.driverWait().until(ExpectedConditions.urlContains("/emision/"));
         new WebDriverWait(driver, Duration.ofSeconds(40)).until(d ->
                 ui.isPresent("shot.editor.xpath")
@@ -74,6 +82,21 @@ public class SupereventoPage {
             throw new AssertionError(
                     "Emisión does not allow a new shot because follow-up is already closed");
         }
+    }
+
+    /**
+     * Opens /emision/{postId} from the current /escribir/{postId} url.
+     */
+    private void openEmisionFromPostUrl() {
+        String current = driver.getCurrentUrl();
+        int query = current.indexOf('?');
+        String path = query >= 0 ? current.substring(0, query) : current;
+        String suffix = query >= 0 ? current.substring(query) : "";
+        if (!path.contains("/escribir/")) {
+            throw new AssertionError(
+                    "Emisión did not open. Current url: " + current);
+        }
+        driver.get(path.replace("/escribir/", "/emision/") + suffix);
     }
 
     /**
