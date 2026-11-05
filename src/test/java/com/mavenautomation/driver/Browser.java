@@ -15,9 +15,10 @@ public final class Browser {
 
     public static WebDriver chrome(AdminConfig config) {
         ChromeOptions options = new ChromeOptions();
-        if (config.headless()) {
-            options.addArguments("--headless=new");
-        }
+        // Headless is commented out for now so the browser stays visible.
+        // if (config.headless()) {
+        //     options.addArguments("--headless=new");
+        // }
         options.addArguments("--window-size=1440,1100");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
